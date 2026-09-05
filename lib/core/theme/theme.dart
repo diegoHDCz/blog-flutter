@@ -19,6 +19,10 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppPallet.backgroundColor,
       elevation: 0,
+      iconTheme: IconThemeData(
+        color: AppPallet.primaryLight,
+        size: 26,
+      ),
     ),
   );
 }
