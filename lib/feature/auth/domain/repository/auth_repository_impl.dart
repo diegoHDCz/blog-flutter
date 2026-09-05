@@ -1,7 +1,7 @@
 import 'package:blog_diego/core/error/exceptions.dart';
 import 'package:blog_diego/core/error/failure.dart';
 import 'package:blog_diego/feature/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:blog_diego/feature/auth/domain/entities/user.dart';
+import 'package:blog_diego/core/common/entities/user.dart';
 import 'package:blog_diego/feature/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
@@ -9,6 +9,23 @@ import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
   AuthRepositoryImpl(this.authRemoteDataSource);
+
+  @override
+  Future<Either<Failure, User>> currentUser() async {
+    try {
+      final user = await authRemoteDataSource.getCurrentUserData();
+      if (user != null) {
+        return right(user);
+      } else {
+        return left(Failure('No user logged in'));
+      }
+    } on sb.AuthException catch (e) {
+      return left(Failure(e.message));
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
   @override
   Future<Either<Failure, User>> loginWithEmail({
     required String email,

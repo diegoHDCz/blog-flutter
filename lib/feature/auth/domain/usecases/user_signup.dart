@@ -1,6 +1,6 @@
 import 'package:blog_diego/core/error/failure.dart';
 import 'package:blog_diego/core/usecase/usecaase.dart';
-import 'package:blog_diego/feature/auth/domain/entities/user.dart';
+import 'package:blog_diego/core/common/entities/user.dart';
 import 'package:blog_diego/feature/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 

@@ -2,6 +2,7 @@ import 'package:blog_diego/feature/auth/data/datasources/auth_remote_data_source
 import 'package:blog_diego/feature/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:blog_diego/feature/auth/domain/repository/auth_repository.dart';
 import 'package:blog_diego/feature/auth/domain/repository/auth_repository_impl.dart';
+import 'package:blog_diego/feature/auth/domain/usecases/current_user.dart';
 import 'package:blog_diego/feature/auth/domain/usecases/user_login.dart';
 import 'package:blog_diego/feature/auth/domain/usecases/user_signup.dart';
 import 'package:blog_diego/feature/auth/presentation/bloc/auth_bloc.dart';
@@ -29,19 +30,42 @@ Future<void> initDependencies() async {
 
   serviceLocator.registerLazySingleton(() => supabase.client);
 }
-
 void _initAuth() {
-  serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(serviceLocator<SupabaseClient>()),
-  );
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(serviceLocator()),
-  );
-  serviceLocator.registerFactory(() => UserSignUp(serviceLocator()));
-
-  serviceLocator.registerFactory(() => UserLogin(serviceLocator()));
-
-  serviceLocator.registerLazySingleton(
-    () => AuthBloc(userSignUp: serviceLocator(), userLogin: serviceLocator()),
-  );
+  // Datasource
+  serviceLocator
+    ..registerFactory<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    )
+    // Repository
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(
+        serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory(
+      () => UserSignUp(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => UserLogin(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => CurrentUser(
+        serviceLocator(),
+      ),
+    )
+    // Bloc
+    ..registerLazySingleton(
+      () => AuthBloc(
+        userSignUp: serviceLocator(),
+        userLogin: serviceLocator(),
+        currentUser: serviceLocator(),
+      ),
+    );
 }
