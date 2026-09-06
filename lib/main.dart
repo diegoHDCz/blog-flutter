@@ -1,3 +1,4 @@
+import 'package:blog_diego/core/common/widgets/cubits/app_user/app_user_cubit.dart';
 import 'package:blog_diego/core/theme/theme.dart';
 import 'package:blog_diego/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_diego/feature/auth/presentation/pages/login_page.dart';
@@ -10,7 +11,10 @@ void main() async {
   await initDependencies();
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => serviceLocator<AuthBloc>())],
+      providers: [
+        BlocProvider(create: (_) => serviceLocator<AppUserCubit>()),
+        BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -37,7 +41,21 @@ class _MyAppState extends State<MyApp> {
       title: 'Blog Diego',
       theme: AppTheme.lightThemeMode,
       darkTheme: AppTheme.darkThemeMode,
-      home: LoginPage(),
+      home: BlocSelector<AppUserCubit, AppUserState, bool>(
+        selector: (state) {
+          return state is AppUserLoggedIn;
+        },
+        builder: (context, isLoggedIn) {
+          if(isLoggedIn) {
+            return const Scaffold(
+              body: Center(
+                child: Text('User is logged in'),
+              ),
+            );
+          }
+          return LoginPage();
+        },
+      ),
     );
   }
 }

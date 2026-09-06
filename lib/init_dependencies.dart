@@ -1,3 +1,4 @@
+import 'package:blog_diego/core/common/widgets/cubits/app_user/app_user_cubit.dart';
 import 'package:blog_diego/feature/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:blog_diego/feature/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:blog_diego/feature/auth/domain/repository/auth_repository.dart';
@@ -29,6 +30,8 @@ Future<void> initDependencies() async {
   );
 
   serviceLocator.registerLazySingleton(() => supabase.client);
+  //core
+  serviceLocator.registerLazySingleton(() => AppUserCubit());
 }
 void _initAuth() {
   // Datasource
@@ -60,12 +63,15 @@ void _initAuth() {
         serviceLocator(),
       ),
     )
+
+    
     // Bloc
     ..registerLazySingleton(
       () => AuthBloc(
         userSignUp: serviceLocator(),
         userLogin: serviceLocator(),
         currentUser: serviceLocator(),
+        appUserCubit: serviceLocator(),
       ),
     );
 }
