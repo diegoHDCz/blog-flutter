@@ -24,5 +24,15 @@ class AppTheme {
         size: 26,
       ),
     ),
+    chipTheme: ChipThemeData(
+      backgroundColor: AppPallet.primaryLight.withValues(alpha: 0.15),
+      selectedColor: AppPallet.primaryLight.withValues(alpha: 0.25),
+      labelStyle: const TextStyle(color: AppPallet.primaryLight),
+      secondaryLabelStyle: const TextStyle(color: AppPallet.primaryLight),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+    ),
   );
 }
