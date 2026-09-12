@@ -10,6 +10,7 @@ import 'package:blog_diego/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_diego/feature/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_diego/feature/blog/domain/repositories/blog_repository.dart';
 import 'package:blog_diego/feature/blog/domain/repositories/blog_repository_impl.dart';
+import 'package:blog_diego/feature/blog/domain/usecases/get_all_blogs_usecase.dart';
 import 'package:blog_diego/feature/blog/domain/usecases/upload_blog_usecase.dart';
 import 'package:blog_diego/feature/blog/presentation/bloc/blog_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -74,5 +75,11 @@ void _initBlog() {
       () => BlogRepositoryImpl(serviceLocator()),
     )
     ..registerFactory(() => UploadBlogUsecase(serviceLocator()))
-    ..registerLazySingleton(() => BlogBloc(serviceLocator()));
+    ..registerFactory(() => GetAllBlogsUsecase(serviceLocator()))
+    ..registerLazySingleton(
+      () => BlogBloc(
+        uploadBloguseCase: serviceLocator(),
+        getAllBlogsUsecase: serviceLocator(),
+      ),
+    );
 }

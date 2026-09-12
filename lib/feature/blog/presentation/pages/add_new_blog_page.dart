@@ -76,7 +76,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
         listener: (context, state) {
           if (state is BlogFailure) {
             showSnackBar(context, state.error);
-          } else if (state is BlogSucess) {
+          } else if (state is BlogUploadSuccess) {
             Navigator.pushAndRemoveUntil(
               context,
               BlogPage.route(),
@@ -117,6 +117,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                                 dashPattern: const [10, 4],
                               ),
 
+                              // ignore: sized_box_for_whitespace
                               child: Container(
                                 height: 150,
                                 width: double.infinity,
