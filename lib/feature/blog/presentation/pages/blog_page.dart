@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BlogPage extends StatelessWidget {
-const BlogPage({ super.key });
+  static route() => MaterialPageRoute(builder: (context) => const BlogPage());
+  const BlogPage({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [

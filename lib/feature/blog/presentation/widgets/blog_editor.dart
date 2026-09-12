@@ -11,6 +11,12 @@ const BlogEditor({ super.key, required this.textController, required this.hinTex
     return TextFormField(
         controller: textController,
         maxLines: null,
+        validator: (value) {
+          if(value!.isEmpty){
+            return '$hinText is missing';
+          }
+          return null;
+        },
         decoration: InputDecoration(
           hintText: hinText,
           border: OutlineInputBorder(

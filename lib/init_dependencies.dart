@@ -7,6 +7,11 @@ import 'package:blog_diego/feature/auth/domain/usecases/current_user.dart';
 import 'package:blog_diego/feature/auth/domain/usecases/user_login.dart';
 import 'package:blog_diego/feature/auth/domain/usecases/user_signup.dart';
 import 'package:blog_diego/feature/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_diego/feature/blog/data/datasources/blog_remote_data_source.dart';
+import 'package:blog_diego/feature/blog/domain/repositories/blog_repository.dart';
+import 'package:blog_diego/feature/blog/domain/repositories/blog_repository_impl.dart';
+import 'package:blog_diego/feature/blog/domain/usecases/upload_blog_usecase.dart';
+import 'package:blog_diego/feature/blog/presentation/bloc/blog_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,6 +28,7 @@ Future<void> initDependencies() async {
   }
 
   _initAuth();
+  _initBlog();
 
   final supabase = await Supabase.initialize(
     url: supabaseUrl,
@@ -33,38 +39,21 @@ Future<void> initDependencies() async {
   //core
   serviceLocator.registerLazySingleton(() => AppUserCubit());
 }
+
 void _initAuth() {
   // Datasource
   serviceLocator
     ..registerFactory<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(
-        serviceLocator(),
-      ),
+      () => AuthRemoteDataSourceImpl(serviceLocator()),
     )
     // Repository
     ..registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(
-        serviceLocator(),
-      ),
+      () => AuthRepositoryImpl(serviceLocator()),
     )
     // Usecases
-    ..registerFactory(
-      () => UserSignUp(
-        serviceLocator(),
-      ),
-    )
-    ..registerFactory(
-      () => UserLogin(
-        serviceLocator(),
-      ),
-    )
-    ..registerFactory(
-      () => CurrentUser(
-        serviceLocator(),
-      ),
-    )
-
-    
+    ..registerFactory(() => UserSignUp(serviceLocator()))
+    ..registerFactory(() => UserLogin(serviceLocator()))
+    ..registerFactory(() => CurrentUser(serviceLocator()))
     // Bloc
     ..registerLazySingleton(
       () => AuthBloc(
@@ -74,4 +63,16 @@ void _initAuth() {
         appUserCubit: serviceLocator(),
       ),
     );
+}
+
+void _initBlog() {
+  serviceLocator
+    ..registerFactory<BlogRemoteDataSource>(
+      () => BlogRemoteDataSourceImpl(serviceLocator()),
+    )
+    ..registerFactory<BlogRepository>(
+      () => BlogRepositoryImpl(serviceLocator()),
+    )
+    ..registerFactory(() => UploadBlogUsecase(serviceLocator()))
+    ..registerLazySingleton(() => BlogBloc(serviceLocator()));
 }

@@ -6,7 +6,8 @@ class AppPallet {
   static const Color primaryLightAccent = Color(0xFFffd666); // Amarelo (emoji)
   static const Color textLightPrimary = Color(0xFFFFFFFF); // Branco (texto principal)
   static const Color textLightSecondary = Color(0xFFA1E9C5); // Tom mais claro de verde (subtítulo)
-  static const Color backgroundColor = Color.fromARGB(255, 244, 251, 252); // Azul/Verde gradiente (fundo)
+  static const Color backgroundColor = Color.fromARGB(255, 244, 251, 252); // Azul/Verde gradiente fundo)
+  static const Color errorColor = Color.fromARGB(255, 227, 47, 47); // Azul/Verde gradiente fundo)
   
   // Dark Mode - Definido por você
   static const Color primaryDark = Color(0xFF121212); // Background Slate (Cinza escuro)
